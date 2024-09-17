@@ -37,36 +37,42 @@ class Request {
             if (empty(($entities))) {
                 $code = 404;
             }
-            Response::response(data: $entities, code: $code);
+            Response::response($entities, $code);
             break;
         default:
-            Response::response(
-                data: [],
-                code: 404,
-                message: $_SERVER['REQUEST_URI'] . "not found"
-            );
+            Response::response([],404, $_SERVER['REQUEST_URI'] . "not found");
         }
        
     }
 
     private static function getArrUri(string $requestUri): ?array
         {
-            return explode(separator: "/", string: $requestUri) ?? null;
+            return explode("/", $requestUri) ?? null;
         }
         
         private static function getResourceName(): string
         {
-            $arrUri = self::getArrUri(requestUri: $_SERVER['REQUEST_URI']);
-            $result = $arrUri[count(value: $arrUri) - 1];
-            if(is_numeric(value: $result))
+            $arrUri = self::getArrUri($_SERVER['REQUEST_URI']);
+            $result = $arrUri[count($arrUri) - 1];
+            if(is_numeric($result))
             {
-                $result = $arrUri[count(value: $arrUri) - 2];
+                $result = $arrUri[count($arrUri) - 2];
             }
 
+            return $result;
+        }
+
+        private static function getResourceId(): int
+        {
+            $arrUri = self::getArrUri($_SERVER['REQUEST_URI']);
+            $result = 0;
+            if(is_numeric($arrUri[count($arrUri) - 1]))
+            {
+                $result = $arrUri[count($arrUri) - 1];
+            }
             return $result;
         }
 }
  
  
 ?>
- 

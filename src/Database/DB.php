@@ -17,7 +17,7 @@ class DB
         if (!$this->mysqli) {
             die("Connection failed: " . mysqli_connect_error());
         }
-        $this->mysqli->set_charset(charset: "utf8mb4");
+        $this->mysqli->set_charset("utf8mb4");
     }
 
     function __destruct()

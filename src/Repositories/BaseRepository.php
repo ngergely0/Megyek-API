@@ -12,12 +12,12 @@ class BaseRepository extends DB
     {
         $query = $this->select() . "ORDER BY name";
 
-        return $this->mysqli->query(query: $query)->fetch_all(mode: MYSQLI_ASSOC);
+        return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
     }
 
     public function select(): string
     {
-        return "SELECET * FROM '{$this->tableName}' ";
+        return "SELECT * FROM `{$this->tableName}` ";
     }
 
 }

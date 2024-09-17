@@ -14,22 +14,20 @@ class Response
 
     public function __call($name, $arguments): void
     {
-        $this->response(data: ['data' => []], code: 404);
+        $this->response(['data' => []], 404);
     }
 
-    static function response(
-    
-        array $data, $code = 200, $message = ''): void
+    static function response(array $data, $code = 200, $message = ''): void
         {
             if(isset(self::STATUES[$code])) {
-                http_response_code(response_code: $code);
+                http_response_code($code);
                 if(!$message){
                     $message = self::STATUES[$code];
                 }
                 $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
-                header(header: $protocol . ' ' . $code . ' ' . self::STATUES[$code]);
+                header($protocol . ' ' . $code . ' ' . self::STATUES[$code]);
             }
-            header(header: 'Content-Type: applicatiob/json');
+            header('Content-Type: applicatiob/json');
             $response = [
                 'data' => $data,
                 'message' => $message,
