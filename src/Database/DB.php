@@ -5,7 +5,7 @@ class DB
 {
     const HOST = 'localhost';
     const USER = 'root';
-    const PASSWORD = 'null';
+    const PASSWORD = null;
     const DATABASE = 'postoffice';
     protected $mysqli;
 

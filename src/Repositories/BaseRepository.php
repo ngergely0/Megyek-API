@@ -20,4 +20,18 @@ class BaseRepository extends DB
         return "SELECT * FROM `{$this->tableName}` ";
     }
 
+    public function find($id): array
+    {
+        $query = "SELECT * FROM `{$this->tableName}` WHERE id = {$id}";
+        return $this->mysqli->query($query)->fetch_all(MYSQLI_ASSOC);
+        
+    }
+
+    public function delete($id): string
+    {
+        $query = "SELECT * FROM `{$this->tableName}` WHERE id = {$id}";
+        return $query;
+        
+    }
+
 }

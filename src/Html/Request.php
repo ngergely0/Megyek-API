@@ -26,24 +26,56 @@ class Request {
         }
     }
  
-    private static function getRequest(): void {
+    private static function getRequest(): void
+    {
         $resourceName = self::getResourceName();
+        switch ($resourceName){
+            case 'counties':
+                $db = new CountyRepository();
+                $resourceId = self::getResourceId();
+                $code = 200;
+                if($resourceId){
+                    $entity = $db->find($resourceId);
+                    Response::response($entity, $code);
+                    break;
+                }
+ 
+                $entities = $db->getAll();
+                if(empty($entities)){
+                    $code = 404;
+                }
+                Response::response($entities, $code);
+                break;
+ 
+            default:
+                Response::response([], 404,  $_SERVER['REQUEST_URI'] . " not found");
+        }
+    }
+
+    private static function deleteRequest(): void
+    {
+        $resourceName = self::getResourceName();
+        $resourceId = self::getResourceId();
+        
         switch ($resourceName) {
             case 'counties':
                 $db = new CountyRepository();
-            $code = 200;
- 
-            $entities = $db->getAll();
-            if (empty(($entities))) {
-                $code = 404;
-            }
-            Response::response($entities, $code);
-            break;
-        default:
-            Response::response([],404, $_SERVER['REQUEST_URI'] . "not found");
+                if ($resourceId) {
+                    $entity = $db->find($resourceId);
+                    if ($entity) {
+                        $db->delete($resourceId);
+                        Response::response([], 204);
+                    }   
+                } else {
+                    Response::response([], 404, $_SERVER['REQUEST_URI'] . " not found");
+                }
+                break;
+            default:
+                Response::response([], 404, $_SERVER['REQUEST_URI'] . " not found");
         }
-       
     }
+ 
+ 
 
     private static function getArrUri(string $requestUri): ?array
         {
