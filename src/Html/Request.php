@@ -181,8 +181,18 @@ class Request {
                 }
                 Response::response([], $code);
                 break;
-                default:
-                    Response::response([], 404,  $_SERVER['REQUEST_URI'] . " not found");
+            case 'cities':
+               $code = 404;
+               $db = new CityRepository();
+               $result = $db->delete($id);
+               if ($result) {
+                   $code = 204;
+               }
+               Response::response([], $code);
+               break;
+            default:
+                Response::response([], 404,  $_SERVER['REQUEST_URI'] . " not found");
+           
             }
                 
     }
@@ -228,6 +238,18 @@ class Request {
                 $data = self::getRequestData();
                 if (isset($data['name'])) {
                     $db = new CountyRepository();
+                    $newId = $db->create($data);
+                    $code = 201;
+                    if (!$newId) {
+                        $code = 400; // Bad request
+                    }
+                }
+                Response::response(['id' => $newId], $code);
+                break;
+            case 'cities':
+                $data = self::getRequestData();
+                if (isset($data['city'])) {
+                    $db = new CityRepository();
                     $newId = $db->create($data);
                     $code = 201;
                     if (!$newId) {
@@ -291,6 +313,20 @@ class Request {
             
             if($entity) {
             $result = $db->update($id, ['name' => $data['name']]);
+            }
+            if ($result) {
+                $code = 201;
+            }
+            Response::response([], $code);
+            break;
+        case 'cities':
+            $code = 404;
+            $db = new CityRepository();
+            $data = self::getRequestData();
+            $entity = $db->find($id);
+            
+            if($entity) {
+            $result = $db->update($id, ['city' => $data['name']]);
             }
             if ($result) {
                 $code = 201;
